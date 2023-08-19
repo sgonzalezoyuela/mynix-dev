@@ -8,7 +8,7 @@
       javaVersion = 8;
       overlays = [
         (final: prev: rec {
-          jdk = prev."jdk${toString javaVersion}";
+          jdk = prev."jdk${toString javaVersion}_headless";
           maven = prev.maven.override { inherit jdk; };
         })
       ];
