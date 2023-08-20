@@ -60,11 +60,11 @@
         "jossoctl-pkg": "jossoctl-pkg"
       },
       "locked": {
-        "lastModified": 1692503499,
-        "narHash": "sha256-uXPBhK2RYBdHe+mlJdOpvXr9ZwzxgpVKlU1p6CfcbOY=",
+        "lastModified": 1692507662,
+        "narHash": "sha256-cZl6RWd25yPW165L4umJIZlOkvf5TBhT7M7gSNAl3yg=",
         "owner": "sgonzalezoyuela",
         "repo": "mynix-pkgs",
-        "rev": "432b0b50a6b4492e759140b04b2adbdc2fbd44e5",
+        "rev": "399145d82c44f1ff27c894776d1cbde9a8cf30f8",
         "type": "github"
       },
       "original": {
@@ -80,7 +80,7 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-gK0K2elt5WuOiua3Nbn85eMxYP15ckYE0INB7054zI8=",
+        "narHash": "sha256-V635gyfoSH/8dz31wHIqJH+1xNSV7srEmLpQYtAYQPM=",
         "path": "./jossoctl",
         "type": "path"
       },
