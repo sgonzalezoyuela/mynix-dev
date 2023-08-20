@@ -1,5 +1,5 @@
 {
-  description = "A Nix-flake-based Java 8 + Maven dev env";
+  description = "A Nix-flake-based Java 8 + Maven 3.5.4 dev env";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
@@ -7,9 +7,20 @@
     let
       javaVersion = 8;
       overlays = [
-        (final: prev: rec {
+        (final: prev: {
           jdk = prev."jdk${toString javaVersion}_headless";
-          maven = prev.maven.override { inherit jdk; };
+          maven = prev.stdenv.mkDerivation rec {
+            name = "maven-3.5.4";
+            src = prev.fetchurl {
+              url = "https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz";
+              sha256 = "sha256-zlCxyRNky3fv43dvdWptkrdtkDiwoHgvfVOs8emXoU0=";
+            };
+            buildInputs = [ prev.maven ];
+            buildCommand = ''
+              tar -xf $src
+              mv apache-maven-3.5.4 $out
+            '';
+          };
         })
       ];
       supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
@@ -21,6 +32,11 @@
       devShells = forEachSupportedSystem ({ pkgs }: {
         default = pkgs.mkShell {
           packages = with pkgs; [ jdk maven ];
+          shellHook = ''
+            export JAVA_HOME="${pkgs.jdk}/lib/openjdk"
+            export MAVEN_HOME="${pkgs.maven}"
+            export MAVEN_OPTS="-Dmaven.test.skip=true -Xmx2048m"
+          '';
         };
       });
     };
