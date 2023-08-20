@@ -1,6 +1,5 @@
-# in flake.nix
+# JOSSO development environment: tools to work with JOSSO/IAM.tf
 
-# Prisma with flakes: https://github.com/prisma/prisma/issues/3026#issuecomment-927258138
 {
   description = "JOSSO/IAM.tf project flake";
   inputs = {
