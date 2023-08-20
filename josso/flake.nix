@@ -12,19 +12,27 @@
     flake-utils.lib.eachDefaultSystem
       (system:
         let
+
+          javaVersion = 8;
+          overlays = [
+            (final: prev: {
+              jdk = prev."jdk${toString javaVersion}_headless";
+            })
+          ];
+
           pkgs = import nixpkgs {
-            inherit system;
+            inherit overlays system;
           };
-          jpkgs = import josso-pkgs {
-            inherit system;
-          };
+          jossoctl = josso-pkgs.packages.${system}.jossoctl;
+
         in
         with pkgs;
         {
           devShells.default = mkShell {
             buildInputs = [
+              jdk
               terraform
-              jpkgs.jossoctl
+              jossoctl
             ];
           };
         }
