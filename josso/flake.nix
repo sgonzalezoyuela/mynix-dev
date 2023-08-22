@@ -43,6 +43,6 @@
               myFlakesPkgs.catf
             ];
           };
-        };
+        }
       );
 }
