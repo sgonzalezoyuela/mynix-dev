@@ -28,7 +28,7 @@
           myFlakesPkgs = myFlakes.packages.${system};
 
         in
-        with pkgs; with
+        with pkgs;
         {
           devShells.default = mkShell {
             buildInputs = [
