@@ -11,6 +11,10 @@
         path = ./josso;
         description = "JOSSO w/JDK8";
       };
+      josso-go = {
+        path = ./josso-go;
+        description = "JOSSO w/GO and terraform";
+      };
     };
   };
 }

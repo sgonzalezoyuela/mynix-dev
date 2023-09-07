@@ -1,48 +1,38 @@
-# JOSSO development environment: tools to work with JOSSO/IAM.tf
-
 {
-  description = "JOSSO/IAM.tf project flake";
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
-    flake-utils.url = "github:numtide/flake-utils";
-    josso-pkgs.url = "github:sgonzalezoyuela/mynix-pkgs";
-    myFlakes.url = "git+https://github.com/sgonzalezoyuela/myflakes";
-    
-  };
-  outputs = { self, nixpkgs, flake-utils, josso-pkgs, myFlakes }:
-    flake-utils.lib.eachDefaultSystem
-      (system:
-        let
+  description = "A Nix-flake-based Java 8 + Maven 3.5.4 dev env";
 
-          javaVersion = 8;
-          overlays = [
-            (final: prev: {
-              jdk = prev."jdk${toString javaVersion}_headless";
-            })
-          ];
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-          pkgs = import nixpkgs {
-            inherit overlays system;
+  outputs = { self, nixpkgs }:
+    let
+      javaVersion = 8;
+      overlays = [
+        (final: prev: {
+          jdk = prev."jdk${toString javaVersion}_headless";
+          maven = prev.stdenv.mkDerivation rec {
+            name = "maven-3.5.4";
+            src = prev.fetchurl {
+              url = "https://archive.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz";
+              sha256 = "sha256-zlCxyRNky3fv43dvdWptkrdtkDiwoHgvfVOs8emXoU0=";
+            };
+            buildInputs = [ prev.maven ];
+            buildCommand = ''
+              tar -xf $src
+              mv apache-maven-3.5.4 $out
+            '';
           };
-          jossoctl = josso-pkgs.packages.${system}.jossoctl;
-          myFlakesPkgs = myFlakes.packages.${system};
-
-        in
-        with pkgs;
-        {
-          devShells.default = mkShell {
-            buildInputs = [
-              jdk
-              terraform
-              jossoctl
-              myFlakesPkgs.t
-              myFlakesPkgs.ch
-              myFlakesPkgs.find-in-jar
-              myFlakesPkgs.xclipf
-              myFlakesPkgs.vf
-              myFlakesPkgs.catf
-            ];
-          };
-        }
-      );
+        })
+      ];
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
+        pkgs = import nixpkgs { inherit overlays system; };
+      });
+    in
+    {
+      devShells = forEachSupportedSystem ({ pkgs }: {
+        default = pkgs.mkShell {
+          packages = with pkgs; [ jdk maven packer ];
+        };
+      });
+    };
 }
