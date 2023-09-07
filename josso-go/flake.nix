@@ -13,16 +13,24 @@
         let
 
           pkgs = import nixpkgs {
-            inherit  system;
+            inherit system;
           };
- 
 
         in
         with pkgs;
         {
           devShells.default = mkShell {
             buildInputs = [
+              gnumake
               go
+              gotools
+              gopls
+              go-outline
+              gocode
+              gopkgs
+              gocode-gomod
+              godef
+              golint
               terraform
             ];
           };
