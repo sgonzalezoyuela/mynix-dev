@@ -6,8 +6,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/release-23.05";
     flake-utils.url = "github:numtide/flake-utils";
     josso-pkgs.url = "github:sgonzalezoyuela/mynix-pkgs";
+    myFlakes.url = "git+https://github.com/sgonzalezoyuela/myflakes";
+    
   };
-  outputs = { self, nixpkgs, flake-utils, josso-pkgs }:
+  outputs = { self, nixpkgs, flake-utils, josso-pkgs, myFlakes }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -23,6 +25,7 @@
             inherit overlays system;
           };
           jossoctl = josso-pkgs.packages.${system}.jossoctl;
+          myFlakesPkgs = myFlakes.packages.${system};
 
         in
         with pkgs;
@@ -32,6 +35,12 @@
               jdk
               terraform
               jossoctl
+              myFlakesPkgs.t
+              myFlakesPkgs.ch
+              myFlakesPkgs.find-in-jar
+              myFlakesPkgs.xclipf
+              myFlakesPkgs.vf
+              myFlakesPkgs.catf
             ];
           };
         }
