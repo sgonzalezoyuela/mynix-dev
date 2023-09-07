@@ -31,6 +31,7 @@
               gocode-gomod
               godef
               golint
+              gofumpt
               terraform
             ];
           };
