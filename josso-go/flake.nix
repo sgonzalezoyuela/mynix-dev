@@ -22,9 +22,8 @@
         {
           devShells.default = mkShell {
             buildInputs = [
-              jdk
+              go
               terraform
-              jossoctl
             ];
           };
         }
